@@ -5,16 +5,19 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import java.io.IOException;
 
 public class Entry {
-    public static void main (String[] args) throws IOException {
-        String token = null;
+    public static void main (String[] args) {
+
         OAuth auth = new OAuth();
+
         try {
-            token = auth.getToken();
-        } catch (UnirestException err) {
-            err.printStackTrace();
+            auth.getToken();
+        } catch (UnirestException e) {
+            e.printStackTrace();
+        } catch (IOException io) {
+            io.printStackTrace();
         }
-        System.out.println(token);
-        RedditAPI.getRequest(token);
+
+        RedditAPI.getRequest();
     }
 }
 

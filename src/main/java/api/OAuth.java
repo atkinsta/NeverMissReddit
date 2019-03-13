@@ -24,8 +24,9 @@ public class OAuth {
     private String REDDIT_PASS;
     private Properties props = new Properties();
     private FileInputStream config;
+    private String token;
 
-    public String getToken() throws UnirestException, IOException {
+    public void getToken() throws UnirestException, IOException {
         //Get path to config file at runtime.
         String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath() + "config.properties";
         config = new FileInputStream(rootPath);
@@ -35,13 +36,14 @@ public class OAuth {
 
         HttpResponse<JsonNode> response = Unirest.post(GET_TOKEN_URL).basicAuth(REDDIT_APP_ID, REDDIT_SECRET)
                 .header("Content-Type", "x-www-form-urlencoded")
-                .header("User-Agent", "atkinty:atkinty.NeverMissReddit/0.2 (by u/R4nd0mnumbrz)")
+                .header("User-Agent", "desktop:atkinty.java.NeverMissReddit/0.2 (by u/R4nd0mnumbrz)")
                 .queryString("grant_type", "password") //Wow this took forever to find out...
                 .queryString("username", REDDIT_USER)
                 .queryString("password", REDDIT_PASS)
                 .asJson();
 
-        return response.getBody().getObject().getString("access_token");
+        token = response.getBody().getObject().getString("access_token");
+        setToken(token);
     };
 
     private void setVars() {
@@ -49,5 +51,18 @@ public class OAuth {
         REDDIT_SECRET = props.getProperty("REDDIT_SECRET");
         REDDIT_USER = props.getProperty("REDDIT_USER");
         REDDIT_PASS = props.getProperty("REDDIT_PASS");
+    }
+
+    private void setToken(String token) {
+        RedditAPI.token = token;
+    }
+
+    private void refreshToken(String token) throws IOException, UnirestException {
+        getToken();
+
+    }
+
+    private void setRefreshTimer(int timer) {
+
     }
 }
