@@ -13,8 +13,8 @@ public class Entry {
         } catch (UnirestException err) {
             err.printStackTrace();
         }
-
         System.out.println(token);
+        RedditAPI.getRequest(token);
     }
 }
 

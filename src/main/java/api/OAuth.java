@@ -5,6 +5,8 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.mashape.unirest.request.HttpRequestWithBody;
+import com.mashape.unirest.request.body.RequestBodyEntity;
 import org.apache.http.client.HttpClient;
 
 import java.io.FileInputStream;
@@ -24,7 +26,6 @@ public class OAuth {
     private FileInputStream config;
 
     public String getToken() throws UnirestException, IOException {
-
         //Get path to config file at runtime.
         String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath() + "config.properties";
         config = new FileInputStream(rootPath);
@@ -32,18 +33,15 @@ public class OAuth {
 
         setVars();
 
-        String body = String.format("{\"grant_type\": \"password\", \"username\": \"%s\", \"password\": \"%s\"}", REDDIT_USER, REDDIT_PASS);
-
-        Unirest.clearDefaultHeaders();
-
         HttpResponse<JsonNode> response = Unirest.post(GET_TOKEN_URL).basicAuth(REDDIT_APP_ID, REDDIT_SECRET)
-                .header("Accept", "application/json")
-                .header("Content-Type", "application/x-www-form-urlencoded")
+                .header("Content-Type", "x-www-form-urlencoded")
                 .header("User-Agent", "atkinty:atkinty.NeverMissReddit/0.2 (by u/R4nd0mnumbrz)")
-                .body(body)
+                .queryString("grant_type", "password") //Wow this took forever to find out...
+                .queryString("username", REDDIT_USER)
+                .queryString("password", REDDIT_PASS)
                 .asJson();
 
-        return response.getBody().toString();
+        return response.getBody().getObject().getString("access_token");
     };
 
     private void setVars() {
