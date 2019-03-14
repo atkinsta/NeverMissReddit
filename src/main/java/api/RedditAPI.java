@@ -11,7 +11,7 @@ public class RedditAPI {
     public static String token = null;
 
     public static void getRequest() {
-        if (token != null) {
+        if (token != null) { //This is slightly redundant, as OAuth.setToken already checks for null
             System.out.println(token);
             GetRequest request = Unirest.get(url).header("Authorization", "bearer " + token).header("Accept", "application/json");
             System.out.println(request.getHeaders());

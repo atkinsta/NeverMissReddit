@@ -8,12 +8,9 @@ import java.io.IOException;
 public class Entry {
 
     public static void main (String[] args) {
-
-        OAuth auth = new OAuth();
-
         try {
-            auth.init();
-            auth.getToken();
+            OAuth.init();
+            OAuth.getToken();
         } catch (UnirestException e) {
             e.printStackTrace();
         } catch (IOException io) {

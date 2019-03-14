@@ -17,16 +17,16 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 
 public class OAuth {
-    private final String GET_TOKEN_URL = "https://www.reddit.com/api/v1/access_token";
-    private String REDDIT_AGENT;
-    private String REDDIT_APP_ID;
-    private String REDDIT_SECRET;
-    private String REDDIT_USER;
-    private String REDDIT_PASS;
-    private Properties props = new Properties();
-    private FileInputStream config;
+    private static final String GET_TOKEN_URL = "https://www.reddit.com/api/v1/access_token";
+    private static String REDDIT_AGENT;
+    private static String REDDIT_APP_ID;
+    private static String REDDIT_SECRET;
+    private static String REDDIT_USER;
+    private static String REDDIT_PASS;
+    private static Properties props = new Properties();
+    private static FileInputStream config;
 
-    public void init() throws FileNotFoundException, IOException {
+    public static void init() throws FileNotFoundException, IOException {
         //Get path to config file at runtime.
         String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath() + "config.properties";
         config = new FileInputStream(rootPath);
@@ -36,7 +36,7 @@ public class OAuth {
         Unirest.setDefaultHeader("User-Agent", REDDIT_AGENT);
     }
 
-    public void getToken() throws UnirestException, IOException {
+    public static void getToken() throws UnirestException, IOException {
         HttpRequestWithBody request = Unirest.post(GET_TOKEN_URL).basicAuth(REDDIT_APP_ID, REDDIT_SECRET);
         request.header("Content-Type", "x-www-form-urlencoded");
 
@@ -53,7 +53,7 @@ public class OAuth {
         setToken(response.getBody().getObject().getString("access_token"));
     };
 
-    private void setVars() {
+    private static void setVars() {
         REDDIT_APP_ID = props.getProperty("REDDIT_APP_ID");
         REDDIT_SECRET = props.getProperty("REDDIT_SECRET");
         REDDIT_USER = props.getProperty("REDDIT_USER");
@@ -61,19 +61,19 @@ public class OAuth {
         REDDIT_AGENT = props.getProperty("REDDIT_AGENT");
     }
 
-    private void setToken(String token) {
+    private static void setToken(String token) {
         if (token != null)
             RedditAPI.token = token;
         else
             System.out.println("Unable to get a token");
     }
 
-    private void refreshToken(String token) throws IOException, UnirestException {
+    private static void refreshToken(String token) throws IOException, UnirestException {
         getToken();
 
     }
 
-    private void setRefreshTimer(int timer) {
+    private static void setRefreshTimer(int timer) {
 
     }
 }
