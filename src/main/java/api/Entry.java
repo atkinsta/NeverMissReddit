@@ -12,6 +12,7 @@ public class Entry {
         OAuth auth = new OAuth();
 
         try {
+            auth.init();
             auth.getToken();
         } catch (UnirestException e) {
             e.printStackTrace();

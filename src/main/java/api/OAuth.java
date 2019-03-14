@@ -26,7 +26,7 @@ public class OAuth {
     private Properties props = new Properties();
     private FileInputStream config;
 
-    public void getToken() throws UnirestException, IOException {
+    public void init() throws FileNotFoundException, IOException {
         //Get path to config file at runtime.
         String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath() + "config.properties";
         config = new FileInputStream(rootPath);
@@ -34,7 +34,9 @@ public class OAuth {
 
         setVars();
         Unirest.setDefaultHeader("User-Agent", REDDIT_AGENT);
+    }
 
+    public void getToken() throws UnirestException, IOException {
         HttpRequestWithBody request = Unirest.post(GET_TOKEN_URL).basicAuth(REDDIT_APP_ID, REDDIT_SECRET);
         request.header("Content-Type", "x-www-form-urlencoded");
 
@@ -62,6 +64,8 @@ public class OAuth {
     private void setToken(String token) {
         if (token != null)
             RedditAPI.token = token;
+        else
+            System.out.println("Unable to get a token");
     }
 
     private void refreshToken(String token) throws IOException, UnirestException {
