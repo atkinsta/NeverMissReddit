@@ -7,13 +7,14 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.GetRequest;
 
 public class RedditAPI {
-    private static String url = "https://oauth.reddit.com/hot";
+    private static String url = "https://oauth.reddit.com/";
     public static String token = null;
 
-    public static void getRequest() {
-        if (token != null) { //This is slightly redundant, as OAuth.setToken already checks for null
+    public static void getRequest(String parameter) {
+        //TODO Investigate best way to implement a universal API caller, if needed
+        if (token != null) {
             System.out.println(token);
-            GetRequest request = Unirest.get(url).header("Authorization", "bearer " + token).header("Accept", "application/json");
+            GetRequest request = Unirest.get(url + parameter).header("Authorization", "bearer " + token).header("Accept", "application/json");
             System.out.println(request.getHeaders());
 
             HttpResponse<JsonNode> response = null;

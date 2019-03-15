@@ -44,7 +44,6 @@ public class OAuth {
 
         HttpResponse<JsonNode> response = Unirest.post(GET_TOKEN_URL).basicAuth(REDDIT_APP_ID, REDDIT_SECRET)
                 .header("Content-Type", "x-www-form-urlencoded")
-                .header("User-Agent", "atkinty.nevermiss.NeverMiss/0.2 (by u/R4nd0mnumbrz)")
                 .queryString("grant_type", "password") //Wow this took forever to find out...
                 .queryString("username", REDDIT_USER)
                 .queryString("password", REDDIT_PASS)

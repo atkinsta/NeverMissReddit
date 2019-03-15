@@ -17,7 +17,7 @@ public class Entry {
             io.printStackTrace();
         }
 
-        RedditAPI.getRequest();
+        RedditAPI.getRequest("/hot");
     }
 }
 
